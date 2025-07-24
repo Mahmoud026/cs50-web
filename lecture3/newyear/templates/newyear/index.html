@@ -1,0 +1,71 @@
+{% extends 'newyear/base.html' %}
+{% load i18n %}
+{% block title %}New Year{% endblock %}
+{% block body_class %}newyear-bg{% endblock %}
+{% block content %}
+    <h1>
+        Is it New Year?
+        <span dir="rtl" lang="ar" style="margin-left:0.5em;">{% language 'ar' %}Is it New Year?{% endlanguage %}</span>
+    </h1>
+    {% if newyear %}
+        <h2>YES!</h2>
+        <div id="celebrate-message" style="margin:1.5em 0;font-size:1.3rem;color:#ffe066;text-align:center;">🎉 Happy New Year! 🎉</div>
+        <script>
+            // Simple confetti animation
+            function confetti() {
+                for (let i = 0; i < 120; i++) {
+                    let conf = document.createElement('div');
+                    conf.style.position = 'fixed';
+                    conf.style.left = Math.random() * 100 + 'vw';
+                    conf.style.top = '-2vh';
+                    conf.style.width = '8px';
+                    conf.style.height = '16px';
+                    conf.style.background = `hsl(${Math.random()*360},90%,70%)`;
+                    conf.style.opacity = 0.8;
+                    conf.style.borderRadius = '2px';
+                    conf.style.zIndex = 9999;
+                    conf.style.transition = 'top 2.2s cubic-bezier(.23,1.02,.64,1), transform 2.2s';
+                    document.body.appendChild(conf);
+                    setTimeout(() => {
+                        conf.style.top = '100vh';
+                        conf.style.transform = `rotate(${Math.random()*360}deg)`;
+                    }, 10);
+                    setTimeout(() => conf.remove(), 2300);
+                }
+            }
+            confetti();
+        </script>
+    {% else %}
+        <h2>NO.</h2>
+    {% endif %}
+    <div class="newyear-date" style="margin:1em 0 0.5em 0;text-align:center;color:#aee6fa;">
+        New Year {{ event_date.year }} is on: {{ event_date|date:'F j, Y' }}
+    </div>
+    <div class="days-left">
+        {% if days_left == 0 %}
+            <strong>It's New Year's Day!</strong>
+        {% else %}
+            <span>{{ days_left }} day{{ days_left|pluralize }} left until New Year.</span>
+        {% endif %}
+    </div>
+    <div id="progress-bar-container" style="margin:1.2em auto 0 auto;max-width:420px;width:90%;background:rgba(30,34,54,0.7);border-radius:1em;height:18px;box-shadow:0 1px 6px rgba(0,201,255,0.08);">
+        <div id="progress-bar" style="height:100%;background:linear-gradient(90deg,#7fd7ff,#aee6fa);border-radius:1em 0 0 1em;width:0%;transition:width 1s;"></div>
+    </div>
+    <script>
+        // Progress bar for New Year
+        (function() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 1);
+            const end = new Date(now.getFullYear() + 1, 0, 1);
+            const total = (end - start) / (1000 * 60 * 60 * 24);
+            const elapsed = (now - start) / (1000 * 60 * 60 * 24);
+            const percent = Math.min(100, Math.max(0, (elapsed / total) * 100));
+            document.getElementById('progress-bar').style.width = percent + '%';
+        })();
+    </script>
+    {% if fact %}
+        <div style="margin:1.2em 0 0 0;padding:0.8em 1.2em;background:rgba(30,34,54,0.85);color:#aee6fa;border-radius:1em;font-size:1.05rem;max-width:420px;margin-left:auto;margin-right:auto;">
+            <span style="font-size:1.2em;">💡</span> {{ fact }}
+        </div>
+    {% endif %}
+{% endblock %}
