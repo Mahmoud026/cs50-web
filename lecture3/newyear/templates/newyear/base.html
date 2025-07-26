@@ -18,6 +18,7 @@
                     </select>
                 </form>
                 <form action="" method="get" id="tz-form" style="margin:0;">
+                    <label for="tz-select" class="sr-only">{% trans 'Select time zone' %}</label>
                     <select name="tz" id="tz-select" aria-label="{% trans 'Select time zone' %}" style="padding:0.3em 0.7em;border-radius:0.5em;">
                         <option value="UTC" {% if tz == 'UTC' or not tz %}selected{% endif %}>UTC</option>
                         <option value="Asia/Riyadh" {% if tz == 'Asia/Riyadh' %}selected{% endif %}>Asia/Riyadh</option>
