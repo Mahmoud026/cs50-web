@@ -1,6 +1,4 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import EmailSubscription
+from django.shortcuts import render
 import datetime
 import random
 from django.utils.translation import gettext as _
@@ -29,6 +27,19 @@ event_facts = {
         _("The last ten nights of Ramadan are considered the most sacred.")
     ]
 }
+
+
+def index(request):
+    """
+    View for New Year's event page.
+    Calculates the next New Year's date and passes it to the event_view.
+    """
+    def newyear_date(now):
+        # If today is after Jan 1, get next year's Jan 1; else, this year's Jan 1
+        next_new_year = datetime.datetime(now.year + 1, 1, 1, tzinfo=now.tzinfo) if (now.month, now.day) > (1, 1) else datetime.datetime(now.year, 1, 1, tzinfo=now.tzinfo)
+        return {'date': next_new_year}
+    return event_view(request, 'newyear', 'newyear/events/newyear.html', newyear_date)
+
 
 def get_random_fact(event):
     """
@@ -87,36 +98,9 @@ def event_view(request, event_type, template, event_date_func, is_range=False):
         context['event_end'] = event_info['end']
     return render(request, template, context)
 
-def home(request):
-    """
-    Landing page view for /newyear/
-    Handles email subscription form submission and displays a random New Year fact.
-    """
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        if email:
-            # Add email to subscription list if not already present
-            if not EmailSubscription.objects.filter(email=email).exists():
-                EmailSubscription.objects.create(email=email)
-                messages.success(request, _('You have subscribed for event reminders!'))
-            else:
-                messages.info(request, _('You are already subscribed.'))
-        else:
-            messages.error(request, _('Please enter a valid email address.'))
-        return redirect('home')
-    fact = get_random_fact('newyear')
-    return render(request, "newyear/home.html", {"fact": fact})
 
-def index(request):
-    """
-    View for New Year's event page.
-    Calculates the next New Year's date and passes it to the event_view.
-    """
-    def newyear_date(now):
-        # If today is after Jan 1, get next year's Jan 1; else, this year's Jan 1
-        next_new_year = datetime.datetime(now.year + 1, 1, 1, tzinfo=now.tzinfo) if (now.month, now.day) > (1, 1) else datetime.datetime(now.year, 1, 1, tzinfo=now.tzinfo)
-        return {'date': next_new_year}
-    return event_view(request, 'newyear', 'newyear/index.html', newyear_date)
+
+
 
 def eid_el_fitr(request):
     """
@@ -126,7 +110,7 @@ def eid_el_fitr(request):
     def eid_fitr_date(now):
         eid_date = datetime.datetime(2026, 3, 20, tzinfo=now.tzinfo)
         return {'date': eid_date}
-    return event_view(request, 'eid_fitr', 'newyear/eid.html', eid_fitr_date)
+    return event_view(request, 'eid_fitr', 'newyear/events/eid.html', eid_fitr_date)
 
 def eid_el_adha(request):
     """
@@ -137,7 +121,7 @@ def eid_el_adha(request):
         eid_start = datetime.datetime(2026, 5, 26, tzinfo=now.tzinfo)
         eid_end = datetime.datetime(2026, 5, 30, 23, 59, 59, tzinfo=now.tzinfo)
         return {'start': eid_start, 'end': eid_end}
-    return event_view(request, 'eid_adha', 'newyear/eid.html', eid_adha_range, is_range=True)
+    return event_view(request, 'eid_adha', 'newyear/events/eid.html', eid_adha_range, is_range=True)
 
 def ramadan(request):
     """
@@ -152,4 +136,4 @@ def ramadan(request):
             ramadan_start = datetime.datetime(now.year + 1, 2, 17, tzinfo=now.tzinfo)
             ramadan_end = datetime.datetime(now.year + 1, 3, 18, tzinfo=now.tzinfo)
         return {'start': ramadan_start, 'end': ramadan_end}
-    return event_view(request, 'ramadan', 'newyear/ramadan.html', ramadan_range, is_range=True)
+    return event_view(request, 'ramadan', 'newyear/events/ramadan.html', ramadan_range, is_range=True)

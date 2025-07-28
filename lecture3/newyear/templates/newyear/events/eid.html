@@ -1,0 +1,50 @@
+{% extends 'newyear/events/base_event.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Eid" %}{% endblock %}
+{% block body_class %}{% if eid_type == 'fitr' %}eid-fitr-bg{% elif eid_type == 'adha' %}eid-adha-bg{% endif %}{% endblock %}
+
+{% block event_title %}
+    {% if eid_type == "fitr" %}
+        {% trans "Is it Eid al-Fitr?" %}
+    {% elif eid_type == "adha" %}
+        {% trans "Is it Eid al-Adha?" %}
+    {% endif %}
+{% endblock %}
+
+{% block event_title_ar %}
+    {% if eid_type == "fitr" %}
+        {% trans "Is it Eid al-Fitr?" %}
+    {% elif eid_type == "adha" %}
+        {% trans "Is it Eid al-Adha?" %}
+    {% endif %}
+{% endblock %}
+
+{% block celebration_message %}
+    {% if eid_type == "fitr" %}
+        🌙 {% trans "Eid al-Fitr Mubarak!" %} 🌙
+    {% elif eid_type == "adha" %}
+        🕋 {% trans "Eid al-Adha Mubarak!" %} 🕋
+    {% endif %}
+{% endblock %}
+
+{% block event_dates %}
+    {% if eid_type == "fitr" %}
+        {% blocktrans with date=event_date|date:'F j, Y' %}
+            Eid al-Fitr is on: {{ date }}
+        {% endblocktrans %}
+    {% elif eid_type == "adha" %}
+        {% blocktrans with start=event_start|date:'F j, Y' end=event_end|date:'F j, Y' %}
+            Eid al-Adha starts on: {{ start }}
+            and ends on: {{ end }}
+        {% endblocktrans %}
+    {% endif %}
+{% endblock %}
+
+{% block event_name %}
+    {% if eid_type == "fitr" %}
+        {% trans "Eid al-Fitr" %}
+    {% elif eid_type == "adha" %}
+        {% trans "Eid al-Adha" %}
+    {% endif %}
+{% endblock %}

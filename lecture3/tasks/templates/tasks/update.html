@@ -1,0 +1,64 @@
+{% extends "tasks/layout.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Update Task</h1>
+        <a href="{% url 'tasks:index' %}" class="cancel-btn">← Back to Tasks</a>
+    </div>
+    
+    <div class="task-preview">
+        <h3>Current Task Details:</h3>
+        <div class="current-task-card">
+            <div class="task-content">
+                <div class="task-header">
+                    <h4 class="task-title">{{ task.task }}</h4>
+                    <span class="priority-badge priority-{{ task.priority }}">
+                        Priority {{ task.priority }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if form.errors %}
+        <div class="error-message">
+            <strong>Please correct the following errors:</strong>
+            {{ form.errors }}
+        </div>
+    {% endif %}
+    
+    <div class="form-container">
+        <form action="{% url 'tasks:update' task_index %}" method="post">
+            {% csrf_token %}
+            <div class="form-field">
+                <label for="{{ form.task.id_for_label }}">{{ form.task.label }}:</label>
+                {{ form.task }}
+                {% if form.task.errors %}
+                    <div class="error">{{ form.task.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-field">
+                <label for="{{ form.priority.id_for_label }}">{{ form.priority.label }}:</label>
+                {{ form.priority }}
+                {% if form.priority.errors %}
+                    <div class="error">{{ form.priority.errors.0 }}</div>
+                {% else %}
+                    <div class="help">Enter a priority level from 1 (lowest) to 7 (highest)</div>
+                {% endif %}
+            </div>
+            
+            <div class="btn-group">
+                <button type="submit" class="update-btn">
+                    <span class="update-icon">✏️</span> Update Task
+                </button>
+                <a href="{% url 'tasks:index' %}" class="cancel-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block vanta_script %}
+<script src="{% static 'tasks/js/update-vanta.js' %}"></script>
+{% endblock %} 

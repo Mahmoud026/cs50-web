@@ -3,21 +3,21 @@
 {% block title %}Eid{% endblock %}
 {% block body_class %}{% if eid_type == 'fitr' %}eid-fitr-bg{% elif eid_type == 'adha' %}eid-adha-bg{% else %}eid-bg{% endif %}{% endblock %}
 {% block content %}
-    <h1>
+    <h1 class="holiday-title">
         {% if eid_type == "fitr" %}
-            Is it Eid al-Fitr?
-            <span dir="rtl" lang="ar">{% language 'ar' %}Is it Eid al-Fitr?{% endlanguage %}</span>
+            <span>{% trans "Is it Eid al-Fitr?" %}</span>
+            <span dir="rtl" lang="ar" class="holiday-title-ar">{% language 'ar' %}{% trans "Is it Eid al-Fitr?" %}{% endlanguage %}</span>
         {% elif eid_type == "adha" %}
-            Is it Eid al-Adha?
-            <span dir="rtl" lang="ar">{% language 'ar' %}Is it Eid al-Adha?{% endlanguage %}</span>
+            <span>{% trans "Is it Eid al-Adha?" %}</span>
+            <span dir="rtl" lang="ar" class="holiday-title-ar">{% language 'ar' %}{% trans "Is it Eid al-Adha?" %}{% endlanguage %}</span>
         {% else %}
-            Is it Eid?
-            <span dir="rtl" lang="ar">{% language 'ar' %}Is it Eid?{% endlanguage %}</span>
+            <span>{% trans "Is it Eid?" %}</span>
+            <span dir="rtl" lang="ar" class="holiday-title-ar">{% language 'ar' %}{% trans "Is it Eid?" %}{% endlanguage %}</span>
         {% endif %}
     </h1>
     {% if is_eid %}
-        <h2>YES!</h2>
-        <div id="celebrate-message" style="margin:1.5em 0;font-size:1.3rem;color:#ffe066;text-align:center;">
+        <h2>{% trans "YES!" %}</h2>
+        <div class="holiday-message">
             {% if eid_type == 'fitr' %}🌙 Eid Mubarak! 🌙{% elif eid_type == 'adha' %}🕋 Eid Mubarak! 🕋{% else %}🎉 Eid Mubarak! 🎉{% endif %}
         </div>
         <script>
@@ -67,23 +67,41 @@
         <div id="progress-bar" style="height:100%;background:linear-gradient(90deg,#7fd7ff,#aee6fa);border-radius:1em 0 0 1em;width:0%;transition:width 1s;"></div>
     </div>
     <script>
-        // Progress bar for Eid
+        /**
+         * Progress bar calculation for Eid countdown
+         * This self-executing function calculates and updates the progress bar
+         * showing the progress towards the next Eid celebration.
+         */
         (function() {
+            // Get current date for calculations
             const now = new Date();
             let start, end;
+
+            // Set start and end dates based on Eid type
             if ("{{ eid_type }}" === "fitr") {
+                // For Eid al-Fitr: Start from beginning of year to March 20, 2026
                 start = new Date(now.getFullYear(), 0, 1);
                 end = new Date(2026, 2, 20); // March 20, 2026
             } else if ("{{ eid_type }}" === "adha") {
+                // For Eid al-Adha: Start from beginning of year to May 26, 2026
                 start = new Date(now.getFullYear(), 0, 1);
                 end = new Date(2026, 4, 26); // May 26, 2026
             } else {
+                // Default case: Calculate for current year
                 start = new Date(now.getFullYear(), 0, 1);
                 end = new Date(now.getFullYear(), 11, 31);
             }
+
+            // Calculate total days between start and end dates
             const total = (end - start) / (1000 * 60 * 60 * 24);
+            
+            // Calculate days elapsed since start date
             const elapsed = (now - start) / (1000 * 60 * 60 * 24);
+            
+            // Calculate percentage completion (clamped between 0 and 100)
             const percent = Math.min(100, Math.max(0, (elapsed / total) * 100));
+            
+            // Update the progress bar width with the calculated percentage
             document.getElementById('progress-bar').style.width = percent + '%';
         })();
     </script>

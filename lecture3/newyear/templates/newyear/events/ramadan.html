@@ -1,0 +1,21 @@
+{% extends 'newyear/events/base_event.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Ramadan" %}{% endblock %}
+{% block body_class %}ramadan-bg{% endblock %}
+
+{% block event_title %}{% trans "Is it Ramadan?" %}{% endblock %}
+{% block event_title_ar %}{% trans "Is it Ramadan?" %}{% endblock %}
+
+{% block celebration_message %}
+    🕌 {% trans "Ramadan Mubarak!" %} 🕌
+{% endblock %}
+
+{% block event_dates %}
+    {% blocktrans with start=event_start|date:'F j, Y' end=event_end|date:'F j, Y' %}
+        Ramadan {{ event_start.year }} starts on: {{ start }}
+        and ends on: {{ end }}
+    {% endblocktrans %}
+{% endblock %}
+
+{% block event_name %}{% trans "Ramadan" %}{% endblock %}

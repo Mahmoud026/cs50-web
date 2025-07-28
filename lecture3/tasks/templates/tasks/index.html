@@ -1,0 +1,58 @@
+{% extends "tasks/layout.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Tasks <span class="task-count">({{ tasks|length }})</span></h1>
+        {% if tasks %}
+            <form action="{% url 'tasks:clear_all' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="clear-all-btn" onclick="return confirm('Are you sure you want to delete all tasks?')">
+                    Clear All
+                </button>
+            </form>
+        {% endif %}
+    </div>
+    
+    {% if tasks %}
+        <div class="tasks-container">
+            {% for task in tasks %}
+                <div class="task-card">
+                    <div class="task-content">
+                        <div class="task-header">
+                            <h3 class="task-title">{{ task.task }}</h3>
+                            <span class="priority-badge priority-{{ task.priority }}">
+                                Priority {{ task.priority }}
+                            </span>
+                        </div>
+                        <div class="task-actions">
+                            <a href="{% url 'tasks:update' forloop.counter0 %}" class="edit-btn">
+                                <span class="edit-icon">✏️</span> Edit
+                            </a>
+                            <a href="{% url 'tasks:delete' forloop.counter0 %}" class="delete-btn">
+                                <span class="delete-icon">🗑️</span> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📝</div>
+            <h2>No tasks yet</h2>
+            <p>Get started by adding your first task!</p>
+        </div>
+    {% endif %}
+    
+    <div class="action-buttons">
+        <a href="{% url 'tasks:add' %}" class="add-task-btn">
+            <span class="add-icon">➕</span>
+            {% if tasks %}Add Another Task{% else %}Add Your First Task{% endif %}
+        </a>
+    </div>
+{% endblock %}
+
+{% block vanta_script %}
+<script src="{% static 'tasks/js/index-vanta.js' %}"></script>
+{% endblock %}

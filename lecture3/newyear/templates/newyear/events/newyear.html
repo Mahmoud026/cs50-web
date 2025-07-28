@@ -1,0 +1,20 @@
+{% extends 'newyear/events/base_event.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "New Year" %}{% endblock %}
+{% block body_class %}newyear-bg{% endblock %}
+
+{% block event_title %}{% trans "Is it New Year?" %}{% endblock %}
+{% block event_title_ar %}{% trans "Is it New Year?" %}{% endblock %}
+
+{% block celebration_message %}
+    🎉 {% trans "Happy New Year!" %} 🎉
+{% endblock %}
+
+{% block event_dates %}
+    {% blocktrans with date=event_date|date:'F j, Y' %}
+        Next New Year's Day: {{ date }}
+    {% endblocktrans %}
+{% endblock %}
+
+{% block event_name %}{% trans "New Year's Day" %}{% endblock %}

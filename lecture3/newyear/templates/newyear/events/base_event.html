@@ -1,0 +1,47 @@
+{% extends 'newyear/base.html' %}
+{% load i18n %}
+
+{% block content %}
+    {# Common Event Header #}
+    <h1 class="holiday-title">
+        <span>{% block event_title %}{% endblock %}</span>
+        <span dir="rtl" lang="ar" class="holiday-title-ar">
+            {% language 'ar' %}{% block event_title_ar %}{% endblock %}{% endlanguage %}
+        </span>
+    </h1>
+
+    {# Event Status #}
+    {% block event_status %}
+        {% if is_event %}
+            <h2>{% trans "YES!" %}</h2>
+            <div class="holiday-message">
+                {% block celebration_message %}{% endblock %}
+            </div>
+        {% else %}
+            <h2>{% trans "NO." %}</h2>
+        {% endif %}
+    {% endblock %}
+
+    {# Event Dates #}
+    <div class="holiday-dates">
+        {% block event_dates %}{% endblock %}
+    </div>
+
+    {# Days Left Counter #}
+    {% if days_left > 0 %}
+        <div class="days-left">
+            {% blocktrans %}
+                <strong>{{ days_left }}</strong> days left until 
+                {% block event_name %}{% endblock %}
+            {% endblocktrans %}
+        </div>
+    {% endif %}
+
+    {# Fun Fact Section #}
+    {% if fact %}
+        <div class="fun-fact">
+            <p>{% trans "Did you know?" %}</p>
+            <p>{{ fact }}</p>
+        </div>
+    {% endif %}
+{% endblock %}

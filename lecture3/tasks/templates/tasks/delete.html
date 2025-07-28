@@ -1,0 +1,25 @@
+{% extends "tasks/layout.html" %}
+{% load static %}
+
+{% block content %}
+    <h1>Delete Task</h1>
+    {% if task %}
+        <p>Are you sure you want to delete the task "<strong>{{ task.task }}</strong>" (Priority: {{ task.priority }})?</p>
+        <form action="{% url 'tasks:delete' task_index %}" method="post">
+            {% csrf_token %}
+            <div class="btn-group">
+                <input type="submit" value="Confirm Delete" class="delete-btn">
+                <a href="{% url 'tasks:index' %}" class="cancel-btn">Cancel</a>
+            </div>
+        </form>
+    {% else %}
+        <p class="empty-state">Task not found.</p>
+        <div class="btn-group">
+            <a href="{% url 'tasks:index' %}" class="cancel-btn">Back to Tasks</a>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block vanta_script %}
+<script src="{% static 'tasks/js/delete-vanta.js' %}"></script>
+{% endblock %}
